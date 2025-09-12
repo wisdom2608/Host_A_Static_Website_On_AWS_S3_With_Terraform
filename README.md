@@ -1,4 +1,5 @@
-# HostA Static Website In AWS S3
+**Host A Static Website In AWS S3**
+
 How to host a static website on aws S3 bucket using terraform 
 
 Here’s a complete Terraform script to host a static website on an AWS S3 bucket. This will:
@@ -9,7 +10,7 @@ Here’s a complete Terraform script to host a static website on an AWS S3 bucke
 4.	Make the bucket publicly accessible.
 5.	Output the website URL.
 
- # ✅ Prerequisites
+ ✅ **Prerequisites**
  
  •	AWS CLI configured (aws configure)
  •	Terraform installed
