@@ -1,21 +1,23 @@
-# Host_A_Static_Website_AWS_S3
+# HostA Static Website In AWS S3
 How to host a static website on aws S3 bucket using terraform 
 
 Here’s a complete Terraform script to host a static website on an AWS S3 bucket. This will:
-	1.	Create an S3 bucket.
-	2.	Enable static website hosting.
-	3.	Upload static files (optional).
-	4.	Make the bucket publicly accessible.
-	5.	Output the website URL.
 
- ✅ Prerequisites
-	•	AWS CLI configured (aws configure)
-	•	Terraform installed
-	•	A directory containing:
-	•	Your static files (e.g., index.html)
-	•	Terraform files (main.tf, variables.tf, outputs.tf)
+1.	Create an S3 bucket.
+2.	Enable static website hosting.
+3.	Upload static files (optional).
+4.	Make the bucket publicly accessible.
+5.	Output the website URL.
 
-📁 Folder Structure Example
+ # ✅ Prerequisites
+ 
+ •	AWS CLI configured (aws configure)
+ •	Terraform installed
+ •	A directory containing:
+ •	Your static files (e.g., index.html)
+ •	Terraform files (main.tf, variables.tf, outputs.tf)
+
+# 📁 Folder Structure Example
 
  ```hcl
 static-website/
@@ -24,7 +26,7 @@ static-website/
 ├── variables.tf
 ├── outputs.tf
  ```
-🛠️ 1. main.tf
+🛠️ **1. main.tf**
 
 ```hcl
 provider "aws" {
@@ -111,14 +113,14 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 ```
-📤 3. outputs.tf
+📤 **3. outputs.tf**
 
 ```hcl
 output "website_url" {
   value = aws_s3_bucket_website_configuration.website_config.website_endpoint
 }
 ```
-🌐 4. Your index.html
+🌐 **4. Your index.html**
 
 Make sure there’s an index.html in the same directory:
 
@@ -132,27 +134,28 @@ Make sure there’s an index.html in the same directory:
 </html>
 ```
 
-Optional: Add an error.html.
+**Optional: Add an error.html.**
 
-🚀 Deployment Steps
+🚀 **Deployment Steps**
 
 ```bash
 terraform init
 terraform plan -var="bucket_name=my-unique-static-site-bucket"
 terraform apply -var="bucket_name=my-unique-static-site-bucket"
 ```
-📝 Bucket names must be globally unique, or you’ll get an error.
+📝 **Bucket names must be globally unique, or you’ll get an error.**
 
 Visit the website using the output:
 ```bash
 Outputs:
 
-website_url = http://my-unique-static-site-bucket.s3-website-us-east-1.amazonaws.com
+website_url = http://my-unique-static-site-bucket.s3-website-us-east 1.amazonaws.com
 ```
 
-🛡️ Optional Enhancements
-	•	Use Route 53 to map a custom domain.
-	•	Add CloudFront for HTTPS and CDN.
-	•	Use Terraform modules for better reusability.
+🛡️ **Optional Enhancements**
+
+•	Use Route 53 to map a custom domain.
+•	Add CloudFront for HTTPS and CDN.
+•	Use Terraform modules for better reusability.
 
 
