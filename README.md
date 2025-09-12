@@ -18,7 +18,7 @@ Here’s a complete Terraform script to host a static website on an AWS S3 bucke
  •	Your static files (e.g., index.html)
  •	Terraform files (main.tf, variables.tf, outputs.tf)
 
-# 📁 Folder Structure Example
+📁 **Folder Structure Example**
 
  ```hcl
 static-website/
@@ -99,8 +99,9 @@ resource "aws_s3_object" "error" {
   acl    = "public-read"
   depends_on = [aws_s3_object.index]
 }
+```
 
-📄 2. variables.tf
+📄 **2. variables.tf**
 
 ```hcl
 variable "bucket_name" {
