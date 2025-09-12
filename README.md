@@ -13,9 +13,13 @@ Here’s a complete Terraform script to host a static website on an AWS S3 bucke
  ✅ **Prerequisites**
  
  •	AWS CLI configured (aws configure)
+ 
  •	Terraform installed
+ 
  •	A directory containing:
+ 
  •	Your static files (e.g., index.html)
+ 
  •	Terraform files (main.tf, variables.tf, outputs.tf)
 
 📁 **Folder Structure Example**
