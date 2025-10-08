@@ -25,62 +25,61 @@ Here’s a complete Terraform script to host a static website on an AWS S3 bucke
 📁 **Folder Structure Example**
 
  ```hcl
-static-website/
-├── index.html
+static-site/
+│
 ├── main.tf
 ├── variables.tf
 ├── outputs.tf
+└── website-files/
+    ├── index.html
+    └── error.html
  ```
 🛠️ **1. main.tf**
 
 ```hcl
+
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"  # You can change this
 }
 
 resource "aws_s3_bucket" "static_site" {
   bucket = var.bucket_name
-  force_destroy = true
+
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
+
+  versioning {
+    enabled = true  # 👈 Enables versioning
+  }
 
   tags = {
-    Name        = "StaticWebsite"
+    Name        = "StaticSiteBucket"
     Environment = "Dev"
   }
 }
 
-resource "aws_s3_bucket_website_configuration" "website_config" {
+resource "aws_s3_bucket_public_access_block" "public_block" {
   bucket = aws_s3_bucket.static_site.id
 
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "error.html"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "public_access" {
-  bucket = aws_s3_bucket.static_site.id
-
-  block_public_acls   = false
-  block_public_policy = false
-  ignore_public_acls  = false
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
   restrict_public_buckets = false
 }
 
-resource "aws_s3_bucket_policy" "public_read" {
+resource "aws_s3_bucket_policy" "allow_public_read" {
   bucket = aws_s3_bucket.static_site.id
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "PublicReadGetObject"
-        Effect    = "Allow"
+        Effect = "Allow"
         Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.static_site.arn}/*"
+        Action = ["s3:GetObject"]
+        Resource = "${aws_s3_bucket.static_site.arn}/*"
       }
     ]
   })
@@ -89,20 +88,19 @@ resource "aws_s3_bucket_policy" "public_read" {
 resource "aws_s3_object" "index" {
   bucket = aws_s3_bucket.static_site.id
   key    = "index.html"
-  source = "${path.module}/index.html"
+  source = "${path.module}/website-files/index.html"
   content_type = "text/html"
   acl    = "public-read"
 }
 
-# Optional: Add error.html
 resource "aws_s3_object" "error" {
   bucket = aws_s3_bucket.static_site.id
   key    = "error.html"
-  source = "${path.module}/error.html"
+  source = "${path.module}/website-files/error.html"
   content_type = "text/html"
   acl    = "public-read"
-  depends_on = [aws_s3_object.index]
 }
+
 ```
 
 📄 **2. variables.tf**
@@ -112,18 +110,13 @@ variable "bucket_name" {
   description = "The name of the S3 bucket"
   type        = string
 }
-
-variable "aws_region" {
-  description = "AWS region to deploy the bucket"
-  type        = string
-  default     = "us-east-1"
-}
 ```
 📤 **3. outputs.tf**
 
 ```hcl
 output "website_url" {
-  value = aws_s3_bucket_website_configuration.website_config.website_endpoint
+  description = "The URL of the static website"
+  value       = aws_s3_bucket.static_site.website_endpoint
 }
 ```
 🌐 **4. Your index.html**
